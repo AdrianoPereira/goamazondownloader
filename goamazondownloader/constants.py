@@ -23,5 +23,6 @@ INSTRUMENT_LOCAL_PATH = Template(
 
 SIPAM_FILENAME = Template('sbmn_cappi_$year$month$day$sep$hour$minute.nc')
 SIPAM_FRAME_URL = Template(
-    "https://iop.archive.arm.gov/arm-iop/2014/mao/goamazon/T1/schumacher-sband_radar/$year$month$day/?frame=listing&uid=$uid"
+    "https://iop.archive.arm.gov/arm-iop/2014/mao/goamazon/T1/schumacher-sband_radar/$year$month$day/?frame=listing&uid=$token_access"
 )
+ARM_URL_BASE = "https://iop.archive.arm.gov"

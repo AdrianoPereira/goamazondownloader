@@ -4,8 +4,11 @@ import sys; sys.path.insert(0, "/home/adriano/goamazondownloader")
 # Author: Adriano P. Almeida <adriano.almeida@inpe.br>
 # License: MIT
 
-from goamazondownloader import (Downloader, warnings, os)
-from goamazondownloader.constants import (SIPAM_FILENAME)
+from goamazondownloader import (Downloader, os, requests as req, BeautifulSoup,
+                                ElementTree as ET)
+from goamazondownloader.constants import (SIPAM_FILENAME, SIPAM_FRAME_URL,
+                                          ARM_URL_BASE, ARM_LOGIN_URL)
+from goamazondownloader._exceptions import *
 
 
 class SBandRadar(Downloader):
@@ -13,15 +16,65 @@ class SBandRadar(Downloader):
         super(SBandRadar, self).__init__(**kwargs)
         self.hour = kwargs.get('hour', None)
         self.minute = kwargs.get('minute', None)
+        self.initializer()
 
-        self.format_date()
-        self.format_time()
-        super(SBandRadar, self).set_directory(instrument='sbandradar')
-        self.set_filename()
+    def initializer(self) -> None:
+        try:
+            if not self.has_date():
+                raise DateRequiredError
+            if not self.has_time():
+                raise DateRequiredError
+            self.format_date()
+            self.format_time()
+            super(SBandRadar, self).set_directory(instrument='sbandradar')
+            self.set_filename()
+        except DateRequiredError as err:
+            print(err)
+        except TimeRequiredError as err:
+            print(err)
 
     def set_remote_url(self) -> None:
-        if self.token is None:
-            self.token = self.set_token_access()
+        try:
+            if not self.is_logged():
+                raise LoginRequiredError
+            if not self.has_date():
+                raise DateRequiredError
+            if not self.has_time():
+                raise TimeRequiredError
+            frame_url = SIPAM_FRAME_URL.substitute(year=self.year,
+                                                   month=self.month,
+                                                   day=self.day,
+                                                   token_access=self.token)
+            res = req.get(frame_url)
+            soup = BeautifulSoup(res.content, "html.parser")
+            tags = soup.find_all('pre')[0].find_all('a')
+            urls = list()
+            for i, tag in enumerate(tags):
+                if i % 2 != 0:
+                    file_url = os.path.join(ARM_URL_BASE, tag.attrs['href'][1:])
+                    print(file_url)
+                    urls.append(file_url)
+            if not urls:
+                raise ListFilesNotFoundError
+
+            substring = "_cappi_%s%s%s_%s%s" % (self.year, self.month, self.day,
+                                                self.hour, self.minute)
+            file_url = list(filter(lambda url: substring in url, urls))
+            print(file_url)
+            if not file_url:
+                raise UrlFileNotFoundError
+            self.remote_url = file_url[0]
+
+        except LoginRequiredError as err:
+            print(err)
+        except DateRequiredError as err:
+            print(err)
+        except TimeRequiredError as err:
+            print(err)
+        except ListFilesNotFoundError as err:
+            print(err)
+        except UrlFileNotFoundError as err:
+            print(err)
 
     def has_time(self) -> bool:
         return self.hour is not None and self.minute is not None
@@ -33,14 +86,17 @@ class SBandRadar(Downloader):
             if self.minute is not None else None
 
     def set_filename(self) -> None:
-        if not self.has_date():
-            warnings.warn('Date is not complete!', category=UserWarning)
-            return
-        if not self.has_time():
-            warnings.warn('Time is not complete!', category=UserWarning)
-            return
-        if not self.has_directory():
-            self.set_directory()
+        try:
+            if not self.has_date():
+                raise DateRequiredError
+            if not self.has_time():
+                raise TimeRequiredError
+            if not self.has_directory():
+                self.set_directory()
+        except DateRequiredError as err:
+            print(err)
+        except TimeRequiredError as err:
+            print(err)
 
         self.format_date()
         self.format_time()
@@ -55,10 +111,9 @@ class SBandRadar(Downloader):
 
 
 if __name__ == "__main__":
-    obj = SBandRadar(year=2014, month=2, day=18, hour=15, minute=0)
-    # print(obj.directory)
-    # print(obj.filename)
-    # obj.login("adriano.almeida@inpe.bra")
+    obj = SBandRadar(year=2014, month=2, day=18, hour=15, minute=15)
+    obj.login("username")
+    obj.set_remote_url()
     obj.download()
 
 
