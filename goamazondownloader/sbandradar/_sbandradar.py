@@ -58,6 +58,7 @@ if __name__ == "__main__":
     obj = SBandRadar(year=2014, month=2, day=18, hour=15, minute=0)
     # print(obj.directory)
     # print(obj.filename)
-    obj.login("adri")
+    # obj.login("adriano.almeida@inpe.bra")
+    obj.download()
 
 

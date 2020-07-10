@@ -3,6 +3,7 @@ import os
 from goamazondownloader import (requests as req, tqdm)
 from xml.etree import ElementTree as ET
 from goamazondownloader.constants import *
+from goamazondownloader._exceptions import *
 
 
 class Downloader:
@@ -48,37 +49,44 @@ class Downloader:
             os.makedirs(self.directory)
 
     def login(self, username: str) -> None:
-        url_login = ARM_LOGIN_URL.substitute(username=username)
-        res = req.get(url_login)
-        tree = ET.fromstring(res.text.encode('utf-8'))
-        self.token = "uid=%s&st=%s" % (tree.find('id').text,
-                                       tree.find('st').text)
-        if tree.find('status').text is not 'valid':
-            raise Exception("Login not successful, check your username or connection")
-            # else:
-            #     raise Exception("Unable to login, ")
+        try:
+            url_login = ARM_LOGIN_URL.substitute(username=username)
+            res = req.get(url_login)
+            tree = ET.fromstring(res.text.encode('utf-8'))
+            self.token = "uid=%s&st=%s" % (tree.find('id').text,
+                                           tree.find('st').text)
+
+            if tree.find('status').text == 'valid':
+                print('Logged as %s'%(tree.find('email').text))
+            else:
+                raise LoginUnsuccessfulError()
+        except LoginUnsuccessfulError as err:
+            print(err)
 
     def is_logged(self) -> bool:
         return self.token is not None
 
     def download(self) -> None:
-        if self.token is None:
-            raise Exception('Login is required')
+        try:
+            if self.token is None:
+                raise LoginRequiredError()
+            if os.path.exists(self.filename):
+                print('File was already downloaded!')
+                return
+            if self.remote_url is None:
+                raise Exception("Remote URL is note defined!")
+            if not os.path.exists(self.directory):
+                self.make_directory()
 
-        if os.path.exists(self.filename):
-            print('File was already downloaded!')
-            return
-        if self.remote_url is None:
-            raise Exception("Remote URL is note defined!")
-        if not os.path.exists(self.directory):
-            self.make_directory()
+            res = req.get(self.remote_url, stream=True)
+            total_size = int(res.headers['content-length'])
+            with open(self.filename, 'wb') as file:
+                for data in tqdm(iterable=res.iter_content(chunk_size=CHUNCK
+                                                           ),
+                                 total=total_size / CHUNCK, unit='KB'):
+                    file.write(data)
+            print('File %s downloaded!' % self.filename)
+        except LoginRequiredError as err:
+            print(err)
 
-        res = req.get(self.remote_url, stream=True)
-        total_size = int(res.headers['content-length'])
-        with open(self.filename, 'wb') as file:
-            for data in tqdm(iterable=res.iter_content(chunk_size=CHUNCK
-                                                       ),
-                             total=total_size / CHUNCK, unit='KB'):
-                file.write(data)
-        print('File %s downloaded!' % self.filename)
 
