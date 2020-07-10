@@ -26,3 +26,5 @@ SIPAM_FRAME_URL = Template(
     "https://iop.archive.arm.gov/arm-iop/2014/mao/goamazon/T1/schumacher-sband_radar/$year$month$day/?frame=listing&uid=$token_access"
 )
 ARM_URL_BASE = "https://iop.archive.arm.gov"
+STARNET_REMOTE_URL = Template("https://iop.archive.arm.gov/arm-iop-file/2014/mao/goamazon/T1/albrecht-vlfs/starnet-goamazon-$year-$month-$day.dat?uid=token_access")
+STARNET_FILENAME = Template('starnet-goamazon-$year-$month-$day.dat')

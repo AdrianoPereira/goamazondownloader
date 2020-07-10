@@ -23,7 +23,7 @@ class SBandRadar(Downloader):
             if not self.has_date():
                 raise DateRequiredError
             if not self.has_time():
-                raise DateRequiredError
+                raise TimeRequiredError
             self.format_date()
             self.format_time()
             super(SBandRadar, self).set_directory(instrument='sbandradar')
