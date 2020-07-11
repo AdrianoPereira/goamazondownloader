@@ -23,9 +23,7 @@ if sys.argv[-1] == 'publish':
 if sys.argv[-1] == 'uninstall':
     os.system('rm -rf build')
     os.system('rm -rf dist')
-    os.system('rm -rf cappy239.egg-info')
-
-    os.system('twine upload dist/*')
+    os.system('rm -rf goamazondownloader.egg-info')
     sys.exit()
 
 
