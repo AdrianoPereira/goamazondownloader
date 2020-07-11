@@ -31,7 +31,7 @@ if sys.argv[-1] == 'uninstall':
 
 setup(
     name='goamazondownloader',
-    version='0.1.1',
+    version='0.1.0',
     description='A library python to download data of campaign GoAmazon',
     long_description=LONG_DESCRIPTION,
     long_description_content_type='text/markdown',
