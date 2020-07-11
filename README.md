@@ -21,7 +21,27 @@
 For the time being, only the modules to download the files from S-Band Randar (SIPAM) and Very Low 
 Frequency have been implemented.
 
-#### Usage
+##
+
+### Installation
+
+Via pip:
+```console
+pip install goamazondownloader
+```
+
+Via source code:
+```console
+git clone https://github.com/AdrianoPereira/goamazondownloader.git
+cd goamazondownloader
+python setup.py install
+```
+**Dependencies**
+- requests
+- beautifulsoup4
+
+##
+### Usage
 The files are hosted on the [ARM](https://www.arm.gov/research/campaigns/amf2014goamazon) website. 
 To download the files it is necessary to have a registration. Registration can be done quickly through the following 
 link: [https://adc.arm.gov/armuserreg/#/new](https://adc.arm.gov/armuserreg/#/new).
