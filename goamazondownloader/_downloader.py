@@ -20,8 +20,24 @@ class Downloader:
     def initializer(self) -> None:
         pass
 
+    def set_remote_url(self) -> None:
+        pass
+
+    def set_filename(self) -> None:
+        pass
+
     def has_remote_url(self):
         return self.remote_url is not None
+
+    def has_directory(self) -> bool:
+        return self.directory is not None
+
+    def has_date(self) -> bool:
+        return self.year is not None and self.month is not None and \
+               self.day is not None
+
+    def is_logged(self) -> bool:
+        return self.token is not None
 
     def format_date(self) -> None:
         self.year = str(self.year).zfill(4) \
@@ -30,13 +46,6 @@ class Downloader:
             if self.month is not None else None
         self.day = str(self.day).zfill(2) \
             if self.day is not None else None
-
-    def has_directory(self) -> bool:
-        return self.directory is not None
-
-    def has_date(self) -> bool:
-        return self.year is not None and self.month is not None and \
-               self.day is not None
 
     def set_directory(self, instrument: str) -> None:
         try:
@@ -73,9 +82,6 @@ class Downloader:
                 raise LoginUnsuccessfulError()
         except LoginUnsuccessfulError as err:
             print(err)
-
-    def is_logged(self) -> bool:
-        return self.token is not None
 
     def download(self) -> None:
         try:

@@ -64,7 +64,7 @@ class VLFSensor(Downloader):
 
 if __name__ == "__main__":
     obj = VLFSensor(year=2014, month=2, day=18)
-    obj.login("adriano")
+    obj.login("username")
     obj.set_remote_url()
     obj.download()
 
