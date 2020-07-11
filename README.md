@@ -11,7 +11,7 @@
 </div>
 
 ---
-
+[![PyPI version](https://badge.fury.io/py/goamazondownloader.svg)](https://badge.fury.io/py/goamazondownloader)
 ![schema](https://github.com/AdrianoPereira/goamazondownloader/raw/master/assets/schema.png)
 
 ### Features
