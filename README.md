@@ -52,7 +52,7 @@ link: [https://adc.arm.gov/armuserreg/#/new](https://adc.arm.gov/armuserreg/#/ne
 from goamazondownloader import SBandRadar
 
 downloader = SBandRadar(year=2014, month=2, day=18, hour=15, minute=0)
-downloader.obj.login(username="<username>") # <username> maybe your username or e-mail
+downloader.login(username="<username>") # <username> maybe your username or e-mail
 downloader.set_remote_url()
 downloader.download()
 
