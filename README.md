@@ -12,7 +12,7 @@
 
 ---
 
-![schema](./assets/schema.png)
+![schema](https://github.com/AdrianoPereira/goamazondownloader/raw/master/assets/schema.png)
 
 ### Features
 - Download S-Band Radar (SIPAM)
