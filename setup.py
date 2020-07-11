@@ -13,6 +13,7 @@ import sys
 import os
 
 HERE = pathlib.Path(__file__).parent.resolve()
+LONG_DESCRIPTION = (HERE / 'README.md').read_text(encoding='utf-8')
 
 if sys.argv[-1] == 'publish':
     os.system('python setup.py sdist bdist_wheel')
@@ -29,11 +30,10 @@ if sys.argv[-1] == 'uninstall':
 
 
 setup(
-    name='thunderstorm',
+    name='goamazondownloader',
     version='0.1.0',
     description='A library python to download data of campaign GoAmazon',
-    long_description="A Python library to download meteorological data of " +
-                     "campaign GoAmazon",
+    long_description=LONG_DESCRIPTION,
     long_description_content_type='text/markdown',
     url='https://github.com/AdrianoPereira/goamazondownloader',
     author='Adriano P. Almeida',
