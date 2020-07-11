@@ -8,3 +8,4 @@ from .constants import *
 from ._downloader import Downloader
 
 from .sbandradar import *
+from .vlfsensor import *
