@@ -30,7 +30,7 @@ if sys.argv[-1] == 'uninstall':
 
 setup(
     name='thunderstorm',
-    version='0.0.1',
+    version='0.1.0',
     description='A library python to download data of campaign GoAmazon',
     long_description="A Python library to download meteorological data of " +
                      "campaign GoAmazon",
@@ -45,8 +45,6 @@ setup(
         #   5 - Production/Stable
         'Development Status :: 3 - Alpha',
 
-        # Pick your license as you wish
-        'License :: MIT License',
 
         # Specify the Python versions you support here. In particular, ensure
         # that you indicate you support Python 3. These classifiers are *not*
@@ -67,4 +65,5 @@ setup(
         'Say Thanks!': 'http://adrianopereira.github.io',
         'Source': 'https://github.com/AdrianoPereira/goamazondownloader',
     },
+    license = 'MIT'
 )
